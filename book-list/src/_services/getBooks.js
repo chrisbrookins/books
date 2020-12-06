@@ -1,17 +1,26 @@
 const baseUrl = 'https://www.googleapis.com/books/v1';
 
+
+const apiKey = 'JJtF4Uq4A8DPUyymXLRBQh5mrBflQKbA';
+const bookList = 'hardcover-fiction.json';
+
+
+
+
+const searchTerms = 'fantasy';
+
 let options = {
     headers: {
-        'Authorization': 'Bearer '
+        'Authorization': 'Bearer ' + apiKey
     }
 }
+//https://www.googleapis.com/books/v1/volumes?q=search-terms&key=your-API-key
 
-export function getRecommendedBooks() {
-    let url = `${baseUrl}/volumes/recommended`;
-
+export function getSomeBooks() {
+    const nytURL = `https://api.nytimes.com/svc/books/v3/lists/current/${bookList}?api-key=${apiKey}`
     const error = new Error();
 
-    return fetch(url, options)
+    return fetch(nytURL)
         .then((response) => {
             if (response.ok) {
                 return response.json();
