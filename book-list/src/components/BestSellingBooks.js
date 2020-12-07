@@ -15,32 +15,11 @@ const BestSellingBooks = ({props}) => {
 
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [name, setName] = useState('');
+
     const [userBooks, setUserBooks] = useState([]);
 
-    function handleAdd() {
+    // const [userBooks, setUserBooks] = useUserBooklist();
 
-    }
-
-    // const handleClick = (book) => {
-    //     setUserBooks(userBooks.push(book));
-    //
-    //     console.log(userBooks, 'newList');
-    //     // console.log('clicked');
-    // }
-    // const [userBooks, addUserBook] = useState([]);
-
-    // const useUserBooklist = (book) => {
-    //     const [userBooks, addUserBook] = useState([]);
-    //     console.log('click');
-    //     useEffect(() => {
-    //         addUserBook(book);
-    //
-    //     }, [book]); // Only re-run the effect if count changes
-    //     console.log(userBooks)
-    //     return [userBooks]
-    // }
-    console.log(userBooks, 'userBooks');
     useEffect(()=> {
         fetch(fetchUrl)
             .then(res => res.json())
