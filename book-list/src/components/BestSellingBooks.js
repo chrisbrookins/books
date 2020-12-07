@@ -6,36 +6,37 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 
-const BestSellingBooks = ({props}) => {
+const BestSellingBooks = ({books, loading, addBook}) => {
 
-    const baseUrl = 'https://api.nytimes.com/svc/books/v3/lists/current/';
-    const apiKey = 'JJtF4Uq4A8DPUyymXLRBQh5mrBflQKbA';
-    const bestSellerList = 'hardcover-fiction.json';
-    const fetchUrl = `${baseUrl}/${bestSellerList}?api-key=${apiKey}`
+    // const baseUrl = 'https://api.nytimes.com/svc/books/v3/lists/current/';
+    // const apiKey = 'JJtF4Uq4A8DPUyymXLRBQh5mrBflQKbA';
+    // const bestSellerList = 'hardcover-fiction.json';
+    // const fetchUrl = `${baseUrl}/${bestSellerList}?api-key=${apiKey}`
+    //
+    // const [books, setBooks] = useState([]);
+    // const [loading, setLoading] = useState(true);
 
-    const [books, setBooks] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    const [userBooks, setUserBooks] = useState([]);
+    // const [userBooks, setUserBooks] = useState([]);
 
     // const [userBooks, setUserBooks] = useUserBooklist();
+    // console.log(userBooks, 'userBooks list');
 
-    useEffect(()=> {
-        fetch(fetchUrl)
-            .then(res => res.json())
-            .then(response => {
-                setLoading(false)
-                setBooks(response.results.books)
-            })
-            .catch(error => {
-                console.log('error')
-            })
-    }, [fetchUrl]);
+    // useEffect(()=> {
+    //     fetch(fetchUrl)
+    //         .then(res => res.json())
+    //         .then(response => {
+    //             setLoading(false)
+    //             setBooks(response.results.books)
+    //         })
+    //         .catch(error => {
+    //             console.log('error')
+    //         })
+    // }, [fetchUrl]);
 
     return !loading ? (
         <GridWrapper>
             {books.map(book => {
-                return <GridCell>{book.title} <AddBoxIcon onClick={() => setUserBooks(userBooks.concat(book))} /></GridCell>
+                return <GridCell>{book.title} <AddBoxIcon onClick={() => addBook(book)} /></GridCell>
             })}
         </GridWrapper>
     ) : <div>Loading ...</div>
