@@ -1,51 +1,80 @@
 import React, {useEffect, useState} from 'react';
-import BestSellingBooks from './components/BestSellingBooks';
-import UserBooks from './components/UserBooks';
-import {FlexBoxWrap, Header1, Header2} from './styledComponents/styledComponents';
+import {FlexBoxWrap, Header1, Header2, GridCell, GridWrapper} from './styledComponents/styledComponents';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 
 function App() {
-
     const baseUrl = 'https://api.nytimes.com/svc/books/v3/lists/current/';
     const apiKey = 'JJtF4Uq4A8DPUyymXLRBQh5mrBflQKbA';
     const bestSellerList = 'hardcover-fiction.json';
     const fetchUrl = `${baseUrl}/${bestSellerList}?api-key=${apiKey}`;
 
-    const [books, setBooks] = useState([]);
+    const [book, setBook] = useState("");
     const [loading, setLoading] = useState(true);
-    const [userBooks, setUserBooks] = useState([]);
+    const [books, setBooks] = useState([]);
+    const [bestSellers, setBestSellers] = useState([]);
 
     useEffect(()=> {
         fetch(fetchUrl)
             .then(res => res.json())
             .then(response => {
                 setLoading(false)
-                setBooks(response.results.books)
+                setBestSellers(response.results.books)
             })
             .catch(error => {
                 console.log('error')
             })
     }, [fetchUrl]);
 
-    const addBook = (book) => {
-        setUserBooks(userBooks.concat(book));
-    }
+    const handleChange = e => {
+        setBook(e.target.value);
+    };
 
-    return (
-        <div className="App">
-            <FlexBoxWrap className="App-header">
+    const addBook = book => {
+        setBooks(books.concat(book));
+    };
+
+    const removeBook = bookTitle => {
+        const updatedBooks = books.filter(book => book.title !== bookTitle);
+        setBooks(updatedBooks);
+    };
+
+    return !loading ? (
+        <Router>
+            <FlexBoxWrap>
                 <div>
                     <Header1>Best Selling Books</Header1>
-                    <BestSellingBooks books={books} loading={loading} addBook={addBook} />
+                    <GridWrapper>
+                        {bestSellers.map(bestSeller => (
+                            <GridCell key={bestSeller.title}>
+                                <span>
+                                    {bestSeller.title} <AddBoxIcon onClick={() => addBook(bestSeller)} />
+                                </span>
+                            </GridCell>
+                        ))}
+                    </GridWrapper>
                 </div>
                 <div>
                     <Header1>My Books</Header1>
                     <Header2>Click the + icon to add best sellers to your list</Header2>
                     <Header2>Click the - icon to remove best sellers from your list</Header2>
-                    <UserBooks userBooks={userBooks} />
+                    {books.map(book => (
+                        <GridWrapper>
+                            <GridCell key={book.title}>
+                                {book.title}
+                                <span className="delete-btn" onClick={() => removeBook(book.title)}> x</span>
+                            </GridCell>
+                        </GridWrapper>
+                    ))}
                 </div>
             </FlexBoxWrap>
-        </div>
-    );
+        </Router>
+    ) : <div>Loading ...</div>;
 }
 
 export default App;
